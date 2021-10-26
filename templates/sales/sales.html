@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Sales
+{% endblock title %}
+    
+{% block content %}
+          <!-- Section: Contact v.1 -->
+          <section class="pb-3">
+
+            <div class="row">
+    
+            <!-- Grid column -->
+            <div class="col-lg-4 mb-lg-0 mb-4">
+            <div class="card card-cascade narrower z-depth-0 my-5">
+
+              <div class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+      
+              <strong class="white-text my-2"><i class="fa fa-shopping-bag" aria-hidden="true"></i>&nbsp;&nbsp; Sales Point</strong>
+          
+              </div>
+              <div class="card-body pb-0">
+                <div>
+                  <form action="">
+                    {% csrf_token %}
+                    
+                  </form>
+                </div>
+    
+                <div class="table-responsive">
+                  <table class="">
+                    <thead>
+                      <tr>
+                        <th class="pink-text strong"><strong>Particular</strong></th>
+                        <th colspan="4" class="cyan-text text-right"><strong>Details</strong></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr >
+                        <td><b>Medicine name</b></td>
+                        <td colspan="4" class="text-right">
+                          <div class="md-form">
+                          <input placeholder="medics name" list="medix" type="text" id="orangeForm-name" class="form-control mb-0">
+                          </div>
+                        </td>
+                        <datalist id="medix">                          
+                          {% for medicine in stock %}                          
+                            <option id="kaka" data-id={{medicine.pk}} value={{medicine.medicineId}}></option>
+                          {% endfor %}
+                        </datalist>
+
+                      </tr>
+                      <tr>
+                        <td><b>Quantity <small>(tablets)</small></b></td>
+                        <td colspan="4" class="text-right">
+                          <input placeholder="required quantity" type="number">
+                        </td>
+                      </tr>
+                      <tr>
+                        <td  class=""><b>Available stock</b></td>
+                        <td colspan="4"class="text-right text-muted" >138 boxes</td>
+                      </tr>  
+
+                      <tr>
+                        <td><b>Selling price</b></td>
+                        <td colspan="4" class="text-right">Tsh. 2,138 /=</td>
+                      </tr>  
+                      <tr>
+                        
+                        <th colspan="5">
+
+                          <div class="text-center mt-3">
+                            <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-shopping-basket left"></i> <small>Add to tray</small></a>
+                          </div>
+
+                        </th>
+
+                      </tr>
+                    </tbody>
+                  </table>    
+                </div>
+              </div>
+            </div>    
+            </div>
+              <!-- Grid column -->
+    
+              <!-- Grid column -->
+              <div class="col-lg-8">
+    
+                <div class="card card-cascade narrower z-depth-0 my-5">
+
+                  <div class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+          
+                  <div class="d-sm-block">
+                      <button type="button" class="btn btn-outline-white btn-sm btn-rounded px-2"><i
+                          class="fas fa-th-large mt-0"></i>&nbsp;&nbsp;Cash sales</button>
+                  </div>
+          
+                  <strong class="white-text mx-3"><i class="fas fa-shopping-basket"></i>&nbsp;&nbsp; Medicines Cart</strong>
+          
+                  <div>
+                      <button type="button" class="btn btn-outline-white btn-rounded btn-sm"><i
+                          class="fas fa-shopping-basket mt-0"></i>&nbsp;&nbsp;Credit</button>
+                  </div>
+          
+                  </div>
+                  <div class="card-body">
+        
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="pink-text strong"><strong>Item list</strong></th>
+                            <th class="purple-text"><strong>Quantity</strong></th>
+                            <th class="deep-purple-text"><strong>Unit price</strong></th>
+                            <th class="light-blue-text"><strong>Sub total</strong></th>
+                            <th class="cyan-text"><strong>Actions</strong></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Panadol</td>
+                            <td><a class="badge badge-danger"><b>-</b></a> <span style="font-size: 19px;"> 4 </span><a class="badge badge-warning"><b>+</b></a></td>
+                            <td>@ Tsh. 50 /-</td>
+                            <td>Tsh. 200 /-</td>
+                            <td>
+                              <div class="text-center">
+                              <a class="badge badge-pill px-2 py-1 badge-danger">X</a>
+                            </div>
+                          </td>
+                          </tr>
+                          <tr>
+                            <td>Citrizene</td>
+                            <td><a class="badge badge-danger"><b>-</b></a> <span style="font-size: 19px;"> 4 </span><a class="badge badge-warning"><b>+</b></a></td>
+                            <td>@ Tsh. 50 /-</td>
+                            <td>Tsh. 200 /-</td>
+                            <td>
+                              <div class="text-center">
+                              <a class="badge badge-pill px-2 py-1 badge-danger">X</a>
+                            </div>
+                          </tr>
+                          <tr>
+                            <td>Metronidazone</td>
+                            <td><a class="badge badge-danger"><b>-</b></a> <span style="font-size: 19px;"> 4 </span><a class="badge badge-warning"><b>+</b></a></td>
+                            <td>@ Tsh. 50 /-</td>
+                            <td>Tsh. 200 /-</td>
+                            <td>
+                              <div class="text-center">
+                              <a class="badge badge-pill px-2 py-1 badge-danger">X</a>
+                            </div>
+                          </tr>
+                          <tr>
+                            <td>Amoxiline</td>
+                            <td><a class="badge badge-danger"><b>-</b></a> <span style="font-size: 19px;"> 4 </span><a class="badge badge-warning"><b>+</b></a></td>
+                            <td>@ Tsh. 50 /-</td>
+                            <td>Tsh. 200 /-</td>
+                            <td>
+                              <div class="text-center">
+                              <a class="badge badge-pill px-2 py-1 badge-danger">X</a>
+                            </div>
+                          </tr>
+        
+                        </tbody>
+                      </table>
+                    </div>
+        
+                    
+                  
+              <!-- Section: sales cart heading -->
+              <section class="mb-0">
+    
+                  <div class="card-body d-flex justify-content-between">
+                    <h6 class="indigo-text mt-3"><span>Total medicines: 22</span>
+                      <br>
+                    <strong> Total cost Tsh. 52,000/=</strong></h6>
+                      <div class="button-group">
+                      <a href="#" class="btn btn-primary my-2 btn-md">
+                        <i class="fas fa-print left"></i>&nbsp;
+                        Check out
+                      </a>
+                      <a href="#" class="btn dark-3 btn-warning my-2 btn-md">
+                        <i class="fas fa-trash left"></i>&nbsp;
+                        Clear Tray
+                      </a>
+        </div>
+                  </div>
+        
+              </section>
+              <!-- Section: sales cart heading -->
+    
+    
+    
+                  </div>
+                </div>
+              </div>
+              <!-- Grid column -->
+    
+            </div>
+    
+          </section>
+          <!-- Section: Contact v.1 -->
+
+
+
+          
+          {% block scripts %}
+            <script>
+              $(document).ready(function(){
+                $('#medicine_to_sell').on('input', function(){
+                  var val = this.value;
+                  if($('#medix option').filter(function(){
+                    return this.value.toUpperCase() === val.toUpperCase();
+                  }).length){
+                    
+                    url = 'get-medicine-'+val
+                    $.ajax({
+                      type: 'GET',
+                      url: url,
+                      success: function(data){
+                        console.log(data)
+                      }
+                    })
+                  }
+                })
+              })
+            </script>
+          {% endblock scripts %}
+            
+{% endblock content %}
+    

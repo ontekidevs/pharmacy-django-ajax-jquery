@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    manage medicine
+{% endblock title %}
+    
+
+{% block content %}
+            <center>
+            <h1>homepage</h1>
+            {% if request.user.profile.can_add_medicine %}
+            <a href="{% url 'add_medicine' %}">add medicine</a> 
+            {% endif %}
+
+    
+    <br>
+    <br>
+            medicines
+        </center>
+    {% for medicine in medicines %}
+         {{medicine}} <a href="{% url 'edit_medicine' medicine.medicineId %}">edit</a> | <a href="{% url 'delete_medicine' medicine.medicineId %}">delete</a> <br>
+    {% endfor %}
+{% endblock content %}
+    

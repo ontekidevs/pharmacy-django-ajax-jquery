@@ -1,0 +1,630 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Manage User
+{% endblock title %}
+    
+
+
+{% block content %}
+
+<div class="col-md-12">
+
+    <div class="row">
+      <div class="col-md-12 mb-1">
+
+
+        <!-- Tabs -->
+          <div class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+            <div>
+              
+              <ul class="nav" >
+                <li class="nav-item"> 
+                  <a type="button" id="salemantype" data-usertype="Salesman User(s)" data-toggle="tab" href="#panel83" role="tab" class="btn btn-outline-white btn-rounded btn-sm px-2"><i
+                    class="fas fa-lg fa-user mt-0"></i></a>
+  
+  
+                {% if request.user.profile.is_boss == True %}                    
+                    <a type="button" id="admintype" data-usertype="Admin User(s)" data-toggle="tab" href="#panel84" role="tab" class="btn btn-outline-secondary btn-rounded btn-sm px-2"><i
+                      class="fas fa-user-lock   mt-0"></i></a>                
+                      {% endif %}
+                </li>
+              </ul>
+            </div>
+
+    
+            <strong class="white-text mx-3" id="usertype">Users</strong>
+    
+            <div>
+              <!-- <button type="button" class="btn btn-primary"Medium
+              </button> -->
+              
+              {% if request.user.profile.can_add_salesman or request.user.profile.is_boss %}
+                    <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2"  data-toggle="modal" data-target="#modalLRFormDemo"><i
+                    class="fas fa-user-plus mt-0"></i></button>
+              {% endif %}
+
+                <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2 disabled"><i
+                    class="fas fa-trash-alt mt-0"></i></button>
+            </div>
+    
+            </div>
+        <div class="classic-tabs">
+          <div class="tab-content card">
+            <!-- Panel 1 -->
+            <div class="tab-pane fade show active" id="panel83" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+
+                    <!-- STAFSS USERS -->
+                    
+                    
+                    <tr>
+                        <th>#</th>
+                        <th>Full name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        {% if request.user.profile.is_boss %}
+                        <th>Actions</th>                      
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody id="nomousersarea">
+                  
+                  {% if users %}
+                    
+                      {% for user in users %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{user.profile.fullname}}</td>
+                      <td>{{user.username}}</td>
+                      <td>{{user.profile.email}}</td>
+                      <td>{{user.profile.mobile}}</td>
+                      
+                      
+                      {% if request.user.profile.is_boss %}
+                      <td>
+                        <a data-url="{% url 'get_user' user.id %}" class="perms" data-placement="top" title="permission">
+                          <i class="blue-text fas fa-lock"></i>
+                        </a>
+                        
+                        <a data-name={{user.username}} data-url="{% url 'resete_password' user.pk %}" class="reset_password teal-text" data-toggle="tooltip" data-placement="top" title="reset password"><i class="fas fa-key text-warning"></i></a>
+                        <a data-name={{user.username}} data-url="{% url 'remove_user' user.pk %}" class="delete_user red-text" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fas fa-trash-alt"></i></a>
+                      </td>
+                      {% else %}
+                      {% if request.user.pk == user.pk %}
+                      <div class="badge px-3 py-2 success-color-dark text-center">me</div>
+                      {% endif %}
+                      {% endif %}
+
+                        
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                      <th colspan="6" class="text-center text-danger dark-3 lead pt-5">No user registered yet.</th>
+                    </tr>
+                  {% endif %}
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /.Panel 1 -->
+
+            
+            {% if request.user.is_superuser or request.user.profile.is_boss %}               
+            <!-- Panel 2 -->
+            <div class="tab-pane fade" id="panel84" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+
+                    
+                    <tr>
+                        <th>#</th>
+                        <th>Full name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>                    
+                        
+                  </thead>
+                  <tbody id="bossusersarea">
+                    {% if bosses %}
+                    {% for boss in bosses %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{boss.profile.fullname}}</td>
+                      <td>{{boss.username}}</td>
+                      <td>{{boss.profile.email}}</td>
+                      <td>{{boss.profile.mobile}}</td>
+                      <td>
+
+                            
+                        {% if request.user.pk == boss.pk %}
+                        <div class="badge px-3 py-2 success-color-dark text-center">me</div>
+                        {% else %}
+                        <a data-url="{% url 'get_user' boss.id %}" class="perms" data-placement="top" title="permission">
+                          <i class="blue-text fas fa-lock"></i>
+                        </a>
+                        <a data-name={{boss.username}} data-url="{% url 'resete_password' boss.pk %}" class="reset_password" data-toggle="tooltip" data-placement="top" title="reset password"><i class="fas fa-key text-warning"></i></a>
+                        <a data-name={{boss.username}}  data-url="{% url 'remove_user' boss.pk %}" class="delete_user red-text" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fas fa-trash-alt"></i></a>
+                        {% endif %}
+                        
+                                
+                      
+                    </td>
+                    </tr>
+                    {% endfor %}
+
+                    {% else %}
+                    <tr>
+                      <th colspan="6" class="text-center text-danger dark-3 lead pt-5">No user registered yet.</th>
+                    </tr>
+                  {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /.Panel 2 -->             
+            {% endif %}
+                
+
+
+          </div>
+          <!-- /.Tabs -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- MODELS -->
+
+<!--Resetting user's password && Deleting users -->
+<div class="modal fade" id="modalLoginAvatarDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog cascading-modal modal-avatar modal-sm modal-notify " role="document">
+  <!-- Content -->
+  <div class="modal-content">
+
+    <!-- Header -->
+    <div class="modal-header">
+
+    </div>
+    <!-- Body -->
+    <div class="pt-5 mt-5 modal-body text-center mb-1">
+      
+      <p class="mb-2" id="info_action"></p>
+
+      <div class="d-flex mt-4">
+        <a id="cancel_reset_password_button" class="btn btn-warning text-dark btn-sm mt-1">cancel <i class="fas fa-cross ml-1"></i></a>
+        <a id="reset_password_button" class="btn btn-success btn-sm mt-1"></a>
+      </div>
+    </div>
+
+  </div>
+  <!-- Content -->
+</div>
+</div>
+<!-- Resetting user's password && Deleting users -->
+
+
+
+
+
+
+
+
+
+  <!-- User Permittion Modal Form -->
+  <div class="modal fade" id="modalSubscription" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog cascading-modal" role="document">
+    <!-- Content -->
+    <form id="permissionForm">
+      {% csrf_token %}
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header light-blue darken-3 py-2 white-text">
+        <h5 class=""><i class="fas fa-user-alt pr-1" aria-hidden="true"></i> &nbsp; &nbsp;<span   id="profile_perms"> User to be permitted</span></h5>
+        <button type="button" class="close waves-effect waves-light" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- Body -->
+      <div class="modal-body mb-0">
+      <div class="row">
+          <div class="col-md-6 col-sm-12">
+             <!-- Switch -->
+              <div class="switch">
+                <label>
+                  <span class="float-left">Is boss</span>
+                  <span class="float-right">
+                    <input name="userid" type="hidden" id="userid">
+                      <input name="is_boss" id="is_boss" type="checkbox">
+                    <span class="lever"></span>
+                  </span>
+                </label>
+              </div>
+
+ 
+              <!-- Switch -->
+              <div class="switch">
+                <label>
+                    Can add user
+                    <input id="can_add_salesman" name="can_add_salesman" type="checkbox">
+                    <span class="lever"></span>
+                  </label>
+                </div>
+
+                  
+              <div class="switch">
+                <label>
+                  Can add medicine
+                  <input id="can_add_medicine" name="can_add_medicine" type="checkbox">
+                  <span class="lever"></span>
+                </label>
+              </div> 
+              
+                          
+
+            <div class="switch">
+                <label>
+                    can add stock
+                  <input id="can_add_stock"  name="can_add_stock" type="checkbox">
+                  <span class="lever"></span>
+                </label>
+              </div>
+              
+              <div class="switch">
+                <label>
+                    Can remove user
+                    <input id="can_delete_salesman" name="can_delete_salesman" type="checkbox">
+                    <span class="lever"></span>
+                  </label>
+                </div>
+
+                
+                
+              <div class="switch">
+                <label>
+                    can delete stock
+                  <input id="can_delete_stock" name="can_delete_stock" type="checkbox">
+                  <span class="lever"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">              
+              <div class="switch">
+                <label>
+                    can delete medicine
+                  <input id="can_delete_medicine" name="can_delete_medicine" type="checkbox">
+                  <span class="lever"></span>
+                </label>
+              </div>
+
+             <!-- Switch -->
+              <div class="switch">
+                <label>
+                  Can make sales
+                  <input id="can_add_sales" name="can_add_sales" type="checkbox">
+                  <span class="lever"></span>
+                </label>
+              </div>
+
+              
+                  
+              <div class="switch">
+                <label>
+                    can generate report
+                  <input id="can_generate_report" name="can_generate_report"  type="checkbox">
+                  <i class="lever"aria-hidden="true"></i>
+                </label>
+              </div>
+                  
+
+              
+              <div class="switch">
+                <label>
+                    can edit stock
+                  <input id="can_edit_stock" name="can_edit_stock" type="checkbox">
+                  <span class="lever"></span>
+                </label>
+              </div>
+                  
+              <div class="switch">
+                <label>
+                    can edit medicine
+                  <input id="can_edit_medicine" name="can_edit_medicine" type="checkbox">
+                  <span class="lever"></span>
+                </label>
+              </div>
+          </div>          
+        </div>
+  
+  
+        <div class="text-center mt-1-half">
+          <button type="submit" id="permit_user" class="btn btn-info mb-1">Submit <i class="fas fa-check ml-1"></i></button>
+        </div>
+        
+      </div>
+    </div>
+  </form>
+    <!-- Content -->
+  </div>
+</div>
+<!-- User permitting modal form -->
+
+
+<!-- Add User Modal Form -->
+ <div class="modal fade" id="modalLRFormDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog cascading-modal" role="form" >
+   <!-- Content -->
+   <div class="modal-content">
+
+     <!-- Modal cascading tabs -->
+     <div class="modal-c-tabs">
+
+       <!-- Nav tabs -->
+       <ul class="text-white light-blue darken-3" role="tablist">
+           <h5 class="py-3 text-center nav-link"><i class="fas fa-user-plus mr-1"></i>
+            Add New User</h5>
+       </ul>
+
+       <!-- Tab panels -->
+       
+<form id="addUserForm"  data-url="{% url 'add_user' %}">
+  {% csrf_token %}
+<div class="container p-3">
+  {% for field in add_user_form %}
+     <input name={{field.html_name}} class="form-control my-1" type="{% if field.name == 'email' %}email{% else  %}text{% endif %}" placeholder="{{field.label}}">
+  {% endfor %}
+</div>
+           <!-- Footer -->
+           <div class="modal-footer">
+             <button type="button" class="btn btn-outline-danger waves-effect" data-dismiss="modal">cancel</button>
+             <button type="submit" class="btn btn-outline-success waves-effect">register</button>
+           </div>
+  </form>
+</div>
+    </div>
+    <!-- Panel 8 -->
+</div>
+
+   <!-- Content -->
+ </div>
+<!-- Add User Modal Form -->
+
+
+
+<!-- MODALS -->
+
+{% block scripts %}
+<script>
+  function titler (){
+  document.getElementById("usertype").innerHTML('name')
+  }
+</script>
+
+    <script>
+    $('document').ready(function(){
+
+      $("#admintype").on('click', function(){
+        $('#usertype').html($(this).data('usertype'))
+      })
+      $("#salemantype").on('click', function(){
+        $('#usertype').html($(this).data('usertype'))
+      })
+
+      var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+      $(document).on('click', '.perms', function(e){
+        e.preventDefault();
+        var id = $(this).data('id');
+         var get_user_url = $(this).data('url');
+        $("#modalSubscription").modal("show")
+
+         
+         $.ajax({
+           url: get_user_url,
+           type: 'GET',
+           data: {userid:id},
+           success: function(response){
+            $('#profile_perms').html(response.formData.fullname)
+            $('#userid').val(response.formData.profileId)
+
+            $('#is_boss').prop('checked', response.formData.is_boss)
+            $('#can_add_medicine').prop('checked', response.formData.can_add_medicine)
+            $('#can_edit_medicine').prop('checked', response.formData.can_edit_medicine)
+            $('#can_delete_medicine').prop('checked', response.formData.can_delete_medicine)
+            $('#can_add_stock').prop('checked', response.formData.can_add_stock)
+            $('#can_edit_stock').prop('checked', response.formData.can_edit_stock)
+            $('#can_delete_stock').prop('checked', response.formData.can_delete_stock)
+            $('#can_add_sales').prop('checked', response.formData.can_add_sales)
+            $('#can_add_salesman').prop('checked', response.formData.can_add_salesman)
+            $('#can_delete_salesman').prop('checked', response.formData.can_delete_salesman)
+            $('#can_generate_report').prop('checked', response.formData.can_generate_report)
+           },
+           error: function(){
+             console.log('error found')
+           }
+         })
+    })
+
+    
+
+    $("#permissionForm").on('submit', submittingPermissionForm);         
+    
+    function submittingPermissionForm(event){
+      event.preventDefault();
+      $("#modalSubscription").modal("hide")
+
+      var url='/profile/permit/'
+      var userPk = $("#userid").val()
+      const formed_data = $("#permissionForm").serializeArray()
+
+      body = {}
+
+      formed_data.reduce((body, e)=>{
+        const checker = (e) =>{if (e.value == 'on'){return true;} else return e.value}
+        body[e.name] = checker(e)
+        return body
+      }, body)
+      
+      
+      $.ajax({
+        url: url,
+        headers: {'X-CSRFToken': csrfToken},
+        data: body,
+        type: 'POST',
+        success: function(data){
+          console.log('this is our response   ', data)
+        }
+      })
+    }
+    $('#permissionForm')[0].reset()
+
+
+    //resetting users password by boss or superuser
+    $(document).on('click','.reset_password', function(){
+      reset_url = $(this).data('url');
+      username = $(this).data('name');
+
+      $("#info_action").html("Resetting <b class='text-danger'>"+username+"</b>'s password to default!?")
+      $("#reset_password_button").html("<i class='fas fa-recycle ml-1'></i>&nbsp; Reset");
+      $("#modalLoginAvatarDemo").modal('show')      
+      $(document).on('click', '#cancel_reset_password_button', cancelDeleteRequest)
+
+      $(document).on('click', '#reset_password_button',     function (e){
+        $("#modalLoginAvatarDemo").modal('hide')
+        e.preventDefault();
+        $.ajax({
+          url: reset_url,
+          data:{},
+          type: 'GET',
+          success: function(data){
+            console.log('error on reset request')
+            toastr.success('Password has been reseted.', '', {positionClass: 'md-toast-top-right'});
+            //$('#toast-container').attr('class','md-toast-top-right');
+          }
+        })
+        $("#modalLoginAvatarDemo")[0].reset
+       })
+
+
+      })   
+
+
+    //deleting user from the list listed
+    $(document).on('click','.delete_user', function(){
+      delete_user_url = $(this).data('url');
+      delete_username = $(this).data('name');
+
+      $("#info_action").html("Sure to delete <b class='text-danger'>"+delete_username+"</b>!?")
+      $("#reset_password_button").html("<i class='fas fa-trash ml-1'></i>&nbsp; Delete");
+      $("#modalLoginAvatarDemo").modal('show')      
+      $(document).on('click', '#cancel_reset_password_button', cancelDeleteRequest)
+
+      $(document).on('click', '#reset_password_button',     function (e){
+        $("#modalLoginAvatarDemo").modal('hide')
+        e.preventDefault();
+        $.ajax({
+          url: delete_user_url,
+          data:{},
+          type: 'GET',
+          success: function(data){
+            
+            
+            $("#nomousersarea").append("<tr><th>"+response.total_nomo+"</th><td>"+response.nomo.fullname+"</td><td>"+response.nomo.username+"</td><td>"+response.nomo.email+"</td><td>"+response.nomo.mobile+"</td><td><a data-url='profile/get-user/"+response.nomo.profileId+"/' class='perms' data-placement='top' title='permission'><i class='blue-text fas fa-lock'></i></a><a data-name="+response.nomo.username+" data-url='profile/resete-password/"+response.nomo.profileId+"/' class='reset_password teal-text mx-2' data-toggle='tooltip' data-placement='top' title='reset password'><i class='fas fa-key text-warning'></i></a><a data-name="+response.nomo.username+" data-url='profile/remove-user/"+response.nomo.profileId+"/' class='delete_user red-text' data-toggle='tooltip' data-placement='top' title='Remove'><i class='fas fa-trash-alt'></i></a></td></tr>");
+
+              
+              
+                let bossRow= '';
+                let counterboss = 1;
+                    resp.bosses.forEach(boss => {
+                        bossRow += "<tr>";
+                        bossRow += "<th>"+counterboss+"</th>";
+
+                        bossRow += "<td>"+boss.fullname+"</td>";
+                        bossRow += "<td>"+boss.username+"</td>";
+                        bossRow += "<td>"+boss.email+"</td>";
+                        bossRow += "<td>"+boss.mobile+"</td>";
+
+                        bossRow += "<td>"
+                        bossRow += "<a data-url='profile/get-user/"+boss.id+"/' class='perms' data-placement='top' title='permission'><i class='blue-text fas fa-lock'></i></a>"
+                        bossRow += "<a data-name="+boss.username+" data-url='profile/resete-password/"+boss.id+"/' class='reset_password teal-text mx-2' data-toggle='tooltip' data-placement='top' title='reset password'><i class='fas fa-key text-warning'></i></a>"
+                        bossRow += "<a data-name="+boss.username+" data-url='profile/remove-user/"+boss.id+"/' class='delete_user red-text' data-toggle='tooltip' data-placement='top' title='Remove'><i class='fas fa-trash-alt'></i></a>"                      
+                        bossRow += "</td></tr>";
+                        counterboss++;
+                    });
+                    $("#bossusersarea").html(bossRow)
+            toastr.success('User has beeen deleted.', '', {positionClass: 'md-toast-top-right'});
+            //$('#toast-container').attr('class','md-toast-top-right');
+          }
+        })
+        $("#modalLoginAvatarDemo")[0].reset
+       })
+
+
+    })
+ 
+    function cancelDeleteRequest (e){
+        $("#modalLoginAvatarDemo").modal('hide')
+        $("#modalLoginAvatarDemo")[0].reset
+   
+      }
+      
+      
+      //Adding new user to  list
+      $(document).on('submit','#addUserForm', function(event){
+        event.preventDefault();
+        $("#modalLRFormDemo").modal('hide')
+
+        const userform = $("#addUserForm").serializeArray()
+        add_user_url = $(this).data('url')
+
+        body = {}
+
+        userform.reduce((body, e)=>{
+          body[e.name] = e.value
+          return body
+        }, body)
+        
+        $.ajax({
+          url: add_user_url,
+          headers: {'X-CSRFToken': csrfToken},
+          data: body,
+          type: 'POST',
+          success: function(response){
+            
+            $("#nomousersarea").append("<tr><th>"+response.total_nomo+"</th><td>"+response.nomo.fullname+"</td><td>"+response.nomo.username+"</td><td>"+response.nomo.email+"</td><td>"+response.nomo.mobile+"</td><td><a data-url='profile/get-user/"+response.nomo.profileId+"' class='perms' data-placement='top' title='permission'><i class='blue-text fas fa-lock'></i></a><a data-name="+response.nomo.username+" data-url='profile/resete-password/"+response.nomo.profileId+"/' class='reset_password teal-text' data-toggle='tooltip' data-placement='top' title='reset password'><i class='fas fa-key mx-1 text-warning'></i></a><a data-name="+response.nomo.username+" data-url='profile/remove-user/"+response.nomo.profileId+"/' class='delete_user red-text' data-toggle='tooltip' data-placement='top' title='Remove'><i class='fas fa-trash-alt'></i></a></td></tr>");
+          }
+        })
+        $('#addUserForm')[0].reset()
+      })
+  })
+
+</script>
+{% endblock scripts %}  
+{% endblock content %}
+    

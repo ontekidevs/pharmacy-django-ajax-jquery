@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    profile
+{% endblock title %}
+    
+
+
+{% block content %}
+<h3 class="text-center">add salesman</h3>
+    <form method="post">
+        {% csrf_token %}
+ 
+        <input list='jina' placeholder='ingiza jina hapa'>
+        <datalist id="jina">
+            <option value="kaka">
+            <option value="dada">
+            <option value="mama">
+            <option value="baba">
+            <option value="bibi">
+        </datalist>
+
+
+
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-lg px-5 btn-outline-success">save</button>
+    </form>
+{% endblock content %}
+    

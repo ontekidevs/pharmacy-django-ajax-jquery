@@ -1,0 +1,342 @@
+{% extends 'base.html' %} 
+{% block title %} Manage Stock {% endblock title %} 
+{% block content %}
+
+        <!-- Top Table UI for stock table -->
+        <div class="row flex-lg-row-reverse align-items-justify py-5">
+          <div class="col-sm-12 col-lg-2 col-sm-12 mb-4">
+            
+            <div class="card card-cascade narrower z-depth-0">
+    
+              <div
+              class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-2 mb-3 d-flex justify-content-between align-items-center">
+        
+              <strong href="" class="white-text mx-3">Filter</strong>
+      
+              <div>
+                  <button type="button" class="btn btn-outline-white disabled btn-rounded btn-sm px-2"><i class="fas fa-filter    "></i></button>
+              </div>
+      
+              </div>
+      
+              <div class="list-group list-group-flush border-bottom scrollarea">
+                
+                <a data-keyword="all" class="filter_stock list-group-item list-group-item-action py-2 lh-tight" aria-current="true">
+                  <div class="d-flex w-100 align-items-center justify-content-between">
+                    <p class="m-0">Total </p>
+                    <span class="text-muted badge badge-sm badge-info">{{total}}</span>
+                  </div>
+                </a>
+    
+                <a data-keyword="safe"  class="filter_stock list-group-item list-group-item-action py-2 lh-tight" aria-current="true">
+                  <div class="d-flex w-100 align-items-center justify-content-between">
+                    <p class="m-0">Safe </p>
+                    <span class="text-muted badge badge-sm badge-success">{{safe}}</span>
+                  </div>
+                </a>
+    
+    
+                <a data-keyword="soon_expired" class="filter_stock list-group-item list-group-item-action py-2 lh-tight" aria-current="true">
+                  <div class="d-flex w-100 align-items-center justify-content-between">
+                    <p class="m-0">Soon expired </p>
+                    <span class="text-muted badge badge-sm badge-warning">{{soon_expired}}</span>
+                  </div>
+                </a>
+                
+    
+                <a data-keyword="expired" class="filter_stock list-group-item list-group-item-action py-2 lh-tight" aria-current="true">
+                  <div class="d-flex w-100 align-items-center justify-content-between">
+                    <p class="m-0">Expired </p>
+                    <span class="text-muted badge badge-sm badge-danger">{{expired}}</span>
+                  </div>
+                </a>
+              </div>
+            </div>  
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-12">
+            <div class="card card-cascade narrower z-depth-0">
+    
+              <div
+              class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+      
+              <div>
+                  <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2 disabled"><i
+                      class="fas fa-th-large mt-0"></i></button>
+                  <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2 disabled"><i
+                      class="fas fa-columns mt-0"></i></button>
+              </div>
+      
+              <a href="" class="white-text mx-3">Stock</a>
+      
+              <div>
+                  <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2"><i
+                      class="fas fa-search mt-0"></i></button>
+                  <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2"  data-toggle="modal" data-target="#centralModalStock"><i
+                      class="fas fa-plus-circle mt-0"></i></button>
+                  <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2"><i
+                      class="fas fa-trash-alt mt-0"></i></button>
+              </div>
+      
+              </div>
+      
+              <div class="px-4">
+      
+              <div class="table-responsive">
+      <!--Table-->
+      <table class="table table-hover mb-0">
+        <!-- Table head -->
+        <thead>
+          <tr>
+            <th>
+              <i class="fa fa-check" aria-hidden="true"></i>
+            </th>
+            <th class="th-lg">
+              <a>Medicine Name <i class="fas fa-sort ml-1"></i></a>
+            </th>
+            <th class="th-lg">
+              <a>Quantity<i class="fas fa-sort ml-1"></i></a>
+            </th>
+            <th class="th-lg">
+              <a>Expire Date<i class="fas fa-sort ml-1"></i></a>
+            </th>
+            <th class="th-lg">
+              <a>B/price<i class="fas fa-sort ml-1"></i></a>
+            </th>
+            <th class="th-lg">
+              <a>S/Price<i class="fas fa-sort ml-1"></i></a>
+            </th>
+            <th class="th-lg">
+              <a>Profit<i class="fas fa-sort ml-1"></i></a>
+            </th>
+            <th class="th-lg"><a>Actions</a></th>
+          </tr>
+        </thead>
+        <!-- Table head -->
+
+        <!-- Table body -->
+        <tbody id="stocklist">
+          {% for stock in stocks %}
+          <tr>
+            <th scope="row">
+              <input class="form-check-input" type="checkbox" id="checkbox1" />
+              <label for="checkbox1" class="label-table"></label>
+            </th>
+            <td>{{stock.medicineId}}</td>
+            <td>{{stock.quantity}}</td>
+            <td>{{stock.expireDate}}</td>
+            <td>{{stock.buyingPrice}}</td>
+            <td>{{stock.sellingPrice}}</td>
+            <td>{{stock.profit}}</td>
+            <td>
+              <a
+                href="{% url 'edit_stock' stock.pk %}"
+                class=""
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Edit"
+                ><i class="fas fa-pen text-primary"></i
+              ></a>
+              <a
+                href="{% url 'add_stock' stock.pk%}"
+                class="red-text"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Add stock"
+                ><i class="fas text-warning fa-shopping-basket"></i
+              ></a>
+              <a
+                href="{% url 'delete_stock' stock.pk%}"
+                class="red-text"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Delete"
+                ><i class="fas fa-trash-alt"></i
+              ></a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <!-- Table body -->
+      </table>
+      <!-- Table -->
+              </div>
+      
+              <hr class="my-0">
+      
+              <!-- Bottom Table UI -->
+              <div class="d-flex justify-content-between">
+      
+                  <!-- Name -->
+                  <select class="mdb-select colorful-select dropdown-primary md-form hidden-md-down">
+                  <option value="" disabled>Rows number</option>
+                  <option value="1" selected>5 rows</option>
+                  <option value="2">25 rows</option>
+                  <option value="3">50 rows</option>
+                  <option value="4">100 rows</option>
+                  </select>
+      
+                  <!-- Pagination -->
+                  <nav class="my-4">
+                  <ul class="pagination pagination-circle pg-blue mb-0">
+      
+                      <!--First-->
+                      <li class="page-item disabled clearfix d-none d-md-block"><a class="page-link">First</a></li>
+      
+                      <!-- Arrow left -->
+                      <li class="page-item disabled">
+                      <a class="page-link" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                      </a>
+                      </li>
+      
+                      <!-- Numbers -->
+                      <li class="page-item active"><a class="page-link">1</a></li>
+                      <li class="page-item"><a class="page-link">2</a></li>
+                      <li class="page-item"><a class="page-link">3</a></li>
+                      <li class="page-item"><a class="page-link">4</a></li>
+                      <li class="page-item"><a class="page-link">5</a></li>
+      
+                      <!-- Arrow right -->
+                      <li class="page-item">
+                      <a class="page-link" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                      </a>
+                      </li>
+      
+                      <!-- First -->
+                      <li class="page-item clearfix d-none d-md-block"><a class="page-link">Last</a></li>
+      
+                  </ul>
+                  </nav>
+                  <!-- Pagination -->
+      
+              </div>
+              <!-- Bottom Table UI -->
+      
+              </div>
+      
+          </div>
+          </div>
+        </div>
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- MODALS -->
+              <!-- down modal for adding stock-->
+              <div class="modal fade top" id="centralModalStock" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+              aria-hidden="true" data-backdrop="false">
+              <div class="modal-dialog modal-notify modal-success" role="document">
+                <!-- Content -->
+                <div class="modal-content">
+                  <!-- Header -->
+                  <div class="modal-header">
+                    <strong class="heading lead">Add Stock</strong>
+    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                  </div>
+                  <form action="" method="post">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                  </form>
+    
+                  <!-- Body -->
+                  <div class="modal-body">
+                      <div class="modal-body mb-0">
+                          <div class="md-form form-sm">
+                            <i class="fas fa-user prefix"></i>
+                            <input type="text" id="form8" class="form-control form-control-sm">
+                            <label for="form8">Medicine name</label>
+                          </div>
+        
+                          <div class="md-form form-sm">
+                            <i class="fas fa-envelope prefix"></i>
+                            <input type="text" id="form9" class="form-control form-control-sm">
+                            <label for="form9">Biological name</label>
+                          </div>
+        
+                          <div class="md-form form-sm">
+                            <i class="fas fa-tag prefix"></i>
+                            <input type="text" id="form10" class="form-control form-control-sm">
+                            <label for="form10">Side effects</label>
+                          </div>
+        
+                          <div class="row form-group form-sm">
+                              <i class="fas fa-pencil-alt prefix"></i>
+                              <label for="form8">Expire date</label>
+                            <input type="date" class="form-control" name="date" id="expire_date">
+                          </div>
+        
+        
+                        </div>
+                  </div>
+    
+                  <!-- Footer -->
+                  <div class="modal-footer justify-content-center">
+                    
+                      <div class="text-center mt-1-half">
+                          <button class="btn btn-info mb-2">Save <i class="fas fa-paper-plane ml-1"></i></button>
+                        </div>
+  
+                        
+                        <div class="text-center mt-1-half">
+                          <button type="button"  class="btn btn-info mb-2" data-dismiss="modal">Close <i class="fas fa-times ml-1"></i>
+                          </button>
+                        </div>
+                  </div>
+                </div>
+                <!-- Content -->
+              </div>
+            </div>
+        
+        {% block scripts %}
+        <script>
+          $(document).ready(function(){
+
+            $(".filter_stock").click(function(){
+              keyword = $(this).data('keyword')
+              url = "{% url 'filter' %}"
+              
+              $.ajax({
+                url:url,
+                data:{keyword:keyword},
+                type: 'GET',
+                success: function(response){
+                  console.log(response.data.medicineId)
+                  let data =''
+                  response.data.forEach(stock => {
+                    console.log(stock);
+                    
+                    data += '<tr><th scope="row"><input class="form-check-input" type="checkbox" id="checkbox1" /><label for="checkbox1" class="label-table"></label></th>'
+                    data += '<td>'+stock.medicineId+'</td><td>'+stock.quantity+'</td><td>'+stock.expireDate+'</td><td>'+stock.buyingPrice+'</td><td>'+stock.sellingPrice+'</td><td>'+stock.profit+'</td>'
+                    data += '<td><a href="#" class="" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-pen text-primary"></i></a>'
+                    data += '<a href="#" class="red-text" data-toggle="tooltip" data-placement="top" title="Add stock"><i class="fas text-warning fa-shopping-basket"></i></a>'
+                    data += '<a href="#" class="red-text" data-toggle="tooltip"'
+                    data += 'data-placement="top" title="Delete"><i class="fas fa-trash-alt"></i></a></td></tr>'
+                  });
+                  $("#stocklist").html(data)
+                }
+              })
+            })
+          })
+        </script>
+        {% endblock scripts %}
+          
+
+
+{% endblock content %}

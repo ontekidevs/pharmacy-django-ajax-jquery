@@ -1,0 +1,167 @@
+{% load static %}
+ <!-- Sidebar navigation -->
+    <div id="slide-out" class="side-nav bg-white shadow-0 container mx-0">
+      <ul class="custom-scrollbar">
+
+        <!-- Logo -->
+        <li class="logo-sn waves-effect py-3">
+          <div class="text-center">
+            <a href="#" class="pl-0"><img width="90px" src={% static "assets/loga.png" %}></a>
+          </div>
+        </li>
+
+        <!-- Search Form -->
+        <li>
+          <form class="search-form" role="search">
+            <div class="md-form mt-0 waves-light">
+              <input type="text" class="form-control py-2" placeholder="Search">
+            </div>
+          </form>
+        </li>
+
+        <!-- Side navigation links -->
+        <li>
+          <ul class="collapsible collapsible-accordion">
+
+            <li>
+              <a href="{% url 'dashboard' %}" class="collapsible-header waves-effect arrow-r">
+                <i class="w-fa fas fa-tachometer-alt"></i>Dashboards</a>
+            </li>
+                
+            </li>
+            <li>
+              <a href="{% url 'users' %}" class="collapsible-header waves-effect arrow-r">
+                <i class="w-fa fas fa-users"></i>Users
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'sales' %}" class="collapsible-header waves-effect arrow-r">
+                <i class="w-fa fas fa-dollar-sign"></i>Sales
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'allstock' %}" class="collapsible-header waves-effect arrow-r">
+                <i class="w-fa fas fa-database"></i>Stock
+              </a>
+              
+            </li>
+            <li>
+              <a href="#" class="collapsible-header waves-effect arrow-r">
+                <i class="fas fa-history"></i>Stock History
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'expenses' %}" class="collapsible-header waves-effect arrow-r">
+                <i class="w-fa fas fa-wallet"></i>Expenses
+              </a>
+            </li>
+            <li>
+              <a href="#" class="collapsible-header waves-effect arrow-r">
+                <i class="w-fa fas fa-print"></i>Report
+              </a>
+            </li>
+           
+          </ul>
+        </li>
+        <!-- Side navigation links -->
+
+      </ul>
+      <div class="sidenav-bg mask-strong"></div>
+    </div>
+    <!-- Sidebar navigation -->
+
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg scrolling-navbar double-nav">
+<div class="container-fluid">
+      <!-- SideNav slide-out button -->
+      <div class="float-left">
+        <a href="#" data-activates="slide-out" class="button-collapse brand">
+            <img width="25px" class="p-0 m-0" src="{% static 'assets/logo.png' %}" alt="">
+        </a>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb-dn mr-auto">
+          <a href="/"><p>Pharmacy</p></a>
+        
+      </div>
+
+      <div class="d-flex change-mode">
+
+        <!-- <div class="ml-auto mb-0 mr-3 change-mode-wrapper">
+            <i role="button" class="fa fa-moon" aria-hidden="true"></i>
+        </div> -->
+
+        <!-- Navbar links -->
+        <ul class="nav navbar-nav nav-flex-icons ml-auto">
+
+          <!-- Dropdown -->
+          <li class="nav-item dropdown notifications-nav">
+            <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <span class="badge red">3</span> <i class="fas fa-bell"></i>
+              <span class="d-none d-md-inline-block">Notifications</span>
+            </a>
+            <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">
+                <i class="far fa-money-bill-alt mr-2" aria-hidden="true"></i>
+                <span>Soon expired stock</span>
+                <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 13 min</span>
+              </a>
+              <a class="dropdown-item" href="#">
+                <i class="far fa-money-bill-alt mr-2" aria-hidden="true"></i>
+                <span>Stock Approximetoy to finesh</span>
+                <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 33 min</span>
+              </a>
+              <a class="dropdown-item" href="#">
+                <i class="far fa-money-bill-alt mr-2" aria-hidden="true"></i>
+                <span>Over expenses</span>
+                <span class="float-right"><i class="far fa-clock" aria-hidden="true"></i> 33 min</span>
+              </a>
+            </div>
+          </li>
+
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle waves-effect" href="#" id="userDropdown" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-user-circle fa-lg"></i> <span class="clearfix d-none d-sm-inline-block">Profile</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="#">Log Out</a>
+              <a class="dropdown-item" href="#">My account</a>
+            </div>
+          </li>
+
+          
+          <li class="nav-item dropdown notifications-nav">
+            <a  id="dark-mode" class="nav-link waves-effect" aria-haspopup="true" aria-expanded="false"> 
+              <i style="cursor: pointer;" role="button" class="fa fa-moon" aria-hidden="true"></i>
+            </a>
+          </li>
+
+
+
+        </ul>
+        <!-- Navbar links -->
+
+      </div>
+    </div>
+    </nav>
+    <!-- Navbar -->
+
+    <!-- Fixed button -->
+    <div class="fixed-action-btn clearfix d-none d-xl-block" style="bottom: 40px; right: 20px;">
+
+      <a class="btn-floating btn-sm red">
+        <i class="fas fa-pencil-alt"></i>
+      </a>
+      <ul class="list-unstyled">
+        <li><a class="btn-floating blue"><i class="fas fa-shopping-cart"></i></a></li>
+        <li><a class="btn-floating red"><i class="fas fa-database"></i></a></li>
+        <li><a class="btn-floating yellow darken-1"><i class="fas fa-user"></i></a></li>
+        <li><a class="btn-floating green"><i class="fas fa-wallet"></i></a></li>
+      </ul>
+
+    </div>
+    <!-- Fixed button -->

@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    profile
+{% endblock title %}
+    
+
+
+{% block content %}
+
+<div class="col-md-12">
+
+    <div class="row">
+      <div class="col-md-12 mb-1">
+        <!-- Tabs -->
+        <div class="classic-tabs">
+          <!-- Nav tabs -->
+          <div class="tabs-wrapper">
+            <ul class="nav tabs-primary primary-color" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link waves-light active" data-toggle="tab" href="#panel83" role="tab">Salesmen
+                  </a>
+              </li>
+              
+              {% if request.user.profile.is_boss == True or request.user.is_superuser %}
+                  <li class="nav-item">
+                      <a class="nav-link waves-light" data-toggle="tab" href="#panel84" role="tab">Staffs</a>
+                    </li>                  
+                    {% endif %}
+
+            </ul>
+          </div>
+          <!-- Tab panels -->
+          <div class="tab-content card">
+            <!-- Panel 1 -->
+            <div class="tab-pane fade show active" id="panel83" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+
+                    <!-- STAFSS USERS -->
+                    
+                    
+                    <tr>
+                        <th>#</th>
+                        <th>Full name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                      {% for user in users %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{user.profile.fullname}}</td>
+                      <td>{{user.username}}</td>
+                      <td>{{user.profile.email}}</td>
+                      <td>{{user.profile.mobile}}</td>
+                      <td>
+                        <form action="">
+                          {% csrf_token %}
+                        <a data-url="{% url 'get_user' user.id %}" data-id={{user.profile.profileId}}
+                          class="perms" data-placement="top" title="permission">
+                          <i class="blue-text fas fa-lock"></i>
+                        </a>
+                    </form>
+                    
+                      <a href="{% url 'resete_password' user.pk %}" class="teal-text" data-toggle="tooltip" data-placement="top" title="reset password"><i class="fas fa-key text-warning"></i></a>
+                      <a href="{% url 'remove_user' user.pk %}" class="red-text" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fas fa-trash-alt"></i></a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /.Panel 1 -->
+
+            
+            {% if request.user.is_superuser or request.user.profile.is_boss %}               
+            <!-- Panel 2 -->
+            <div class="tab-pane fade" id="panel84" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+
+                    
+                    <tr>
+                        <th>#</th>
+                        <th>Full name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>                    
+                        
+                  </thead>
+                  <tbody>
+                    {% for boss in bosses %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{boss.profile.fullname}}</td>
+                      <td>{{boss.username}}</td>
+                      <td>{{boss.profile.email}}</td>
+                      <td>{{boss.profile.mobile}}</td>
+                      <td>
+
+                            
+                        {% if request.user.pk == boss.pk %}
+                        <div class="badge px-3 py-2 success-color-dark text-center">me</div>
+                        {% else %}
+                        <a data-url="{% url 'permit' boss.pk %}"   
+                          class="perms" 
+                          data-placement="top" 
+                          title="permission"
+
+                          data-name={{boss.profile.fullname}}  
+                          data-isboss={{boss.profile.is_boss}}  
+                          data-addmedicine={{boss.profile.can_add_medicine}}
+                          data-editmedicine={{boss.profile.can_edit_medicine}}
+                          data-deletemedicine={{boss.profile.can_delete_medicine}}
+                          data-addstock={{boss.profile.can_add_stock}}
+                          data-editstock={{boss.profile.can_edit_stock}}
+                          data-deletestock={{boss.profile.can_delete_stock}}
+                          data-adduser={{boss.profile.can_add_user}}
+                          data-deleteuser={{boss.profile.can_delete_user}}
+                          data-generatereport={{boss.profile.can_generate_report}}
+                          data-makesales={{boss.profile.can_add_sales}}
+                          
+                          >
+                          <i class="blue-text fas fa-lock"></i>
+                        </a>
+
+                        <a href="{% url 'resete_password' boss.pk %}" class="" data-toggle="tooltip" data-placement="top" title="reset password"><i class="fas fa-key text-warning"></i></a>
+                        <a href="{% url 'remove_user' boss.pk %}" class="red-text" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fas fa-trash-alt"></i></a>
+                        {% endif %}
+                        
+                                
+                      
+                    </td>
+                    </tr>
+                    {% endfor %}
+
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /.Panel 2 -->             
+            {% endif %}
+                
+
+
+          </div>
+          <!-- /.Tabs -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- MODELS -->
+
+
+  <!-- Modal: Subscription From -->
+  <div class="modal fade" id="modalSubscription" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog cascading-modal" role="document">
+    <!-- Content -->
+    <form method="POST"  id="sperm">
+    {{form.as_p}}
+  </form>
+    <!-- Content -->
+  </div>
+</div>
+<!-- Modal: Subscription From -->
+
+
+
+{% block scripts %}
+    <script>
+    $('document').ready(function(){
+      var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+      $('.perms').click(function(e){
+        e.preventDefault();
+
+
+         var id = $(this).data('id');
+         var url = $(this).data('url');
+         
+        $("#modalSubscription").modal("show")
+         
+         $.ajax({
+           url: url,
+           type: 'POST',
+           data: {userid:id},
+           headers: {'X-CSRFToken': csrfToken},
+           success: function(response){
+             console.log()
+
+            $('#profile_perms').html(response.fullname)
+
+            $('#isboss').prop('checked', response.is_boss)
+            $('#addmedicine').prop('checked', response.can_add_medicine)
+            $('#editmedicine').prop('checked', response.can_edit_medicine)
+            $('#deletemedicine').prop('checked', response.can_delete_medicine)
+            $('#addstock').prop('checked', response.can_add_stock)
+            $('#editstock').prop('checked', response.can_edit_stock)
+            $('#deletestock').prop('checked', response.can_delete_stock)
+            $('#makesales').prop('checked', response.can_add_sales)
+            $('#adduser').prop('checked', response.can_add_salesman)
+            $('#deleteuser').prop('checked', response.can_delete_salesman)
+            $('#generatereport').prop('checked', response.can_generate_report)
+           },
+           error: function(data){
+             alert(data)
+           }
+         })
+
+
+
+         $("#sperm").on('submit', function(event){
+           event.preventDefault();
+           $("#modalSubscription").modal("hide")
+           
+           url='/profile/permit-user/'
+
+           var formed_data = $("#sperm").serialize()
+           sales = $('#isboss').val()
+
+           $.ajax({
+             url: url,
+             headers: {'X-CSRFToken': csrfToken},
+             data: {sales:sales},
+             type: 'POST',
+             success: function(data){
+               console.log('this is our response', data)
+             }
+           })
+         })
+        
+    })
+})
+</script>
+{% endblock scripts %}
+    
+
+{% endblock content %}

@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Expenses
+{% endblock title %}
+    
+{% block content %}
+
+
+<!-- Section: Expenses details -->
+<section class="mb-4">
+
+
+<div class="card card-cascade narrower z-depth-0 my-5">
+
+    <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-0 d-flex justify-content-between align-items-center">
+
+    <div>
+        <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2 disabled"><i
+            class="fas fa-th-large mt-0"></i></button>
+        <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2 disabled"><i
+            class="fas fa-columns mt-0"></i></button>
+    </div>
+
+    <strong class="white-text mx-3">Expenses</strong>
+
+    <div>
+
+        <button type="button" data-toggle="modal" data-target="#centralModalInfoDemo" class="btn btn-outline-white btn-rounded btn-sm px-2"><i
+            class="fas fa-lg fa-plus mt-0"></i></button>
+
+        <button type="button" class="btn btn-outline-white btn-rounded btn-sm px-2 disabled"><i
+            class="fas fa-trash-alt mt-0"></i></button>
+    </div>
+
+    </div>
+
+         
+    <div class="card-body">
+
+    <!-- Grid row -->
+    <div class="row">
+        
+      <!-- Section: Head options -->
+                      <!-- Table -->
+            <table class="table">
+
+              <!-- Table head -->
+              <thead>
+                <tr class="text-dark">
+                  <th>s/n</th>
+                  <th><b>Expense name</b></th>
+                  <th><b>Expense type</b></th>
+                  <th><b>Cost (tsh.)</b></th>
+                </tr>
+              </thead>
+              <!-- Table head -->
+
+              <!-- Table body -->
+              <tbody id="expensesTable">
+                {% if expenses %}
+
+                {% for expense in expenses %}
+                <tr>
+                  <th>{{forloop.counter}}</th>
+                  <td>{{expense.expenseName.capitalize}}</td>
+                  <td> {{expense.expenseType.capitalize}} </td>
+                  <td>Tsh. {{expense.price}} /=</td>
+                </tr>
+                {% endfor %}
+              </tbody><!-- Grid column -->
+                <tr>
+                <td colspan="4" class="text-right">
+                    <a href="#" class="btn indigo text-white float-right"><i class="fas fa-print left"></i> Print</a>
+                </td>
+                </tr>
+                <!-- Grid row -->
+                {% else %}
+                <tr>
+                    <th colspan="4" class="text-center text-danger lead pt-5">No expense recorded yet.</th>
+                </tr>
+              </tbody>
+                {% endif %}
+
+              <!-- Table body -->
+            </table>
+            <!-- Table -->
+
+            
+      <!-- Section: Head options -->
+
+    </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+<!-- MODALS -->
+
+        <!-- Central Modal Info Demo -->
+        <div class="modal fade" id="centralModalInfoDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-notify modal-info" role="document">
+            <!-- Content -->
+            <div class="modal-content">
+                <form id="addExpenseForm" method="post">
+                    {% csrf_token %}
+              <!-- Header -->
+              <div class="modal-header">
+                <p class="heading lead">Record expense</p>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+              </div>
+
+              <!-- Body -->
+              <div class="modal-body">
+                  
+                  {% for field in form %}
+                  {{field}}
+                  {% endfor %}
+                      
+              </div>
+
+              <!-- Footer -->
+              <div class="modal-footer justify-content-center">
+                <button type="submit" class="btn btn-sm btn-info">Record<i class="far fa-gem ml-1"></i></button>
+                <a type="button" class="btn btn-sm btn-outline-info waves-effect" data-dismiss="modal">Abort</a>
+              </div>
+            </form>
+            </div>
+            <!-- Content -->
+          </div>
+        </div>
+        <!-- Central Modal Info Demo -->
+
+
+</div>
+
+</section>
+<!-- Section: Expenses details -->
+
+
+
+
+{% block scripts %}
+<script>
+    $(document).on('submit', '#addExpenseForm', function(event){
+              $("#centralModalInfoDemo").modal("hide")
+        event.preventDefault();
+        let serializeForm = $('#addExpenseForm').serializeArray()
+        let csrf = $('input[name="csrfmiddlewaretoken"]')
+        let url = "{% url 'expenses' %}"
+
+        console.log(serializeForm)
+
+        $.ajax({
+            url: url,
+            csrfmiddlewaretoken: csrf,
+            data:serializeForm,
+            type: 'POST',
+            success: function(resp){
+              $("#expensesTable").append('<tr><th>'+resp.total+'</th><td>'+resp.expense.expenseName+'</td><td>'+resp.expense.expenseType+'</td><td>Tsh.'+resp.expense.price+' /=</td></tr>');
+            },
+            error: function(){
+                console.log('there is an error')
+            }
+        })
+        $('#addExpenseForm')[0].reset()
+    })
+</script>
+{% endblock scripts %}
+    
+
+{% endblock content %}
+    

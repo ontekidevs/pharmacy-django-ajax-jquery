@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="system to manage pharmacy operations">
+        <meta name="author" content="onteki">
+        
+        <title>            
+            {% block title %}{% endblock title %} | Pharmacy Manager
+        </title>
+
+        
+
+    <!-- Font Awesome -->
+    <link href="{% static 'css/fontawesome/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/fontawesome/css/all.css' %}" rel="stylesheet">
+    <link href="{% static 'css/fontawesome/css/fontawesome.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/mdb.css' %}"> -->
+    <!-- Animations -->
+    <link rel="stylesheet" href="{% static 'css/modules/animations-extended.min.css' %}">
+    
+    <!-- Your custom styles (optional) -->
+    <!-- block for extra css links -->
+    {% block extraStyles %}{% endblock extraStyles %}
+
+</head>
+<body class="white-skin fixed-sn">
+  <header>
+  <!-- header part -->
+  {% include 'heada.html' %}
+</header>
+<!-- header part -->
+
+
+  <!-- main part -->
+  <main>
+    <div class="">      
+      {% block content %}
+
+      {% endblock content %}
+    </div>
+  </main>
+  <!-- main part -->
+
+
+<!-- Footer -->
+<footer class="fixed-bottom page-footer pt-0 mt-5 rgba-stylish-light">
+{% include 'footer.html' %}
+</footer>
+  <!-- Footer -->
+
+
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!--extrajavascript block -->
+    {% block extraJavascripts %}{% endblock extraJavascripts %}
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
+
+  <!-- Charts -->
+  
+  {% block scripts %}
+  {% endblock scripts %}
+    
+
+<script>
+  // SideNav Initialization
+  $(".button-collapse").sideNav();
+
+  var container = document.querySelector('.custom-scrollbar');
+  var ps = new PerfectScrollbar(container, {
+    wheelSpeed: 2,
+    wheelPropagation: true,
+    minScrollbarLength: 20
+  });
+
+  $(function () {
+    $('#dark-mode').on('click', function (e) {
+
+      e.preventDefault();
+
+      $('footer, .card').toggleClass('dark-card-admin');
+      $('body, .navbar').toggleClass('white-skin navy-blue-skin');
+      $(this).toggleClass('white text-dark btn-outline-black');
+      $('body').toggleClass('dark-bg-admin');
+      $('h6, .card, p, td, th, i, li a, h4, input, label').not(
+        '#slide-out i, #slide-out a, .dropdown-item i, .dropdown-item').toggleClass('text-white');
+      $('.btn-dash').toggleClass('grey blue').toggleClass('lighten-3 darken-3');
+      $('.gradient-card-header').toggleClass('white black lighten-4');
+      $('.list-panel a').toggleClass('navy-blue-bg-a text-white').toggleClass('list-group-border');
+
+    });
+  });
+
+</script>
+
+</body>
+
+</html>
