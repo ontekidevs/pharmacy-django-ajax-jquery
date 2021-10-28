@@ -21,66 +21,90 @@
               <strong class="white-text my-2"><i class="fa fa-shopping-bag" aria-hidden="true"></i>&nbsp;&nbsp; Sales Point</strong>
           
               </div>
+
+              <style>
+                #selling-form input{
+                  text-align: right;
+                }
+                td .text-right{
+                  padding-left: 14px;
+                  padding: 10px;
+                  float: right;
+                }
+              </style>
+
+
               <div class="card-body pb-0">
                 <div>
                   <form action="">
                     {% csrf_token %}
-                    
+                    <div class="table-responsive">
+                      <table class="form" id="selling-form">
+                        <thead>
+                          <tr>
+                            <th class="pink-text strong"><strong>Particular</strong></th>
+                            <th colspan="4" class="cyan-text text-right"><strong>Details</strong></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr >
+                            <td><b>Medicine name</b></td>
+                            <td colspan="4" class="text-right">
+                              <div class="md-form">
+                              <input placeholder="medicine name" list="medix" type="text" id="orangeForm-name" class="form-control mb-0">
+                            </div>
+                            </td>
+                            <datalist id="medix">                          
+                              {% for medicine in stock %}                          
+                                <option id="kaka" data-id={{medicine.pk}} value={{medicine.medicineId}}></option>
+                              {% endfor %}
+                            </datalist>
+    
+                          </tr>
+                          <tr>                            
+                            <td><b>Quantity <small>(tablets)</small></b></td>
+                            <td colspan="4" class="text-right">
+                                <div class="md-form">
+                                <input placeholder="selling quantity" type="text" id="orangeForm-name" class="form-control mb-0">
+                              </div>
+                            </td>                          
+                          </tr>
+                          <tr>
+                            <td  class=""><b>Available stock</b></td>
+                            <td colspan="4"class="text-right text-muted" >
+                              <div class="md-form">
+                                <input placeholder="selling quantity" value="123 boxes" type="text" id="orangeForm-name" class="form-control mb-0 disabled">
+                              </div>
+                            </td>
+                          </tr>  
+    
+                          <tr>
+                            <td><b>Selling price</b></td>
+                            <td colspan="4" class="text-right">
+                              
+                              <div class="md-form">
+                                <input value="Tsh. 2,138 /=" placeholder="selling quantity" list="medix" type="text" id="orangeForm-name" class="form-control disabled mb-0">
+                              </div>
+                            </td>
+                          </tr>  
+                          <tr>
+                            
+                            <th colspan="5">
+    
+                              <div class="text-center mt-3">
+                                <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-shopping-basket left"></i> <small>Add to tray</small></a>
+                              </div>
+    
+                            </th>
+    
+                          </tr>
+                        </tbody>
+                      </table>    
+                    </div>
                   </form>
                 </div>
     
-                <div class="table-responsive">
-                  <table class="">
-                    <thead>
-                      <tr>
-                        <th class="pink-text strong"><strong>Particular</strong></th>
-                        <th colspan="4" class="cyan-text text-right"><strong>Details</strong></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr >
-                        <td><b>Medicine name</b></td>
-                        <td colspan="4" class="text-right">
-                          <div class="md-form">
-                          <input placeholder="medics name" list="medix" type="text" id="orangeForm-name" class="form-control mb-0">
-                          </div>
-                        </td>
-                        <datalist id="medix">                          
-                          {% for medicine in stock %}                          
-                            <option id="kaka" data-id={{medicine.pk}} value={{medicine.medicineId}}></option>
-                          {% endfor %}
-                        </datalist>
-
-                      </tr>
-                      <tr>
-                        <td><b>Quantity <small>(tablets)</small></b></td>
-                        <td colspan="4" class="text-right">
-                          <input placeholder="required quantity" type="number">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td  class=""><b>Available stock</b></td>
-                        <td colspan="4"class="text-right text-muted" >138 boxes</td>
-                      </tr>  
-
-                      <tr>
-                        <td><b>Selling price</b></td>
-                        <td colspan="4" class="text-right">Tsh. 2,138 /=</td>
-                      </tr>  
-                      <tr>
-                        
-                        <th colspan="5">
-
-                          <div class="text-center mt-3">
-                            <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-shopping-basket left"></i> <small>Add to tray</small></a>
-                          </div>
-
-                        </th>
-
-                      </tr>
-                    </tbody>
-                  </table>    
-                </div>
+                
               </div>
             </div>    
             </div>

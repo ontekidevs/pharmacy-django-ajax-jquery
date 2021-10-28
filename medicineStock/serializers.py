@@ -1,15 +1,19 @@
-from django.db import models
-from rest_framework import fields, serializers
+from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import serializers
 from medicineStock.models import Stock
-from medicine.models import Medicine
-from rest_framework.generics import APIView
 
 
 class StockSerializer(serializers.ModelSerializer):
-    model= Stock 
-    fields= '__all__'
+    class Meta:
+        model = Stock
+        fields = '__all__'
 
-class FilteredStock(APIView):
-    def post(self, request, formart=None):
-    
-        pass
+
+class Get_Stock_List(APIView):
+    def get(self, request):
+        stock = Stock.objects.all()
+        serialized = StockSerializer(stock, many=True)
+        print(serialized)
+        return Response(serialized.data)

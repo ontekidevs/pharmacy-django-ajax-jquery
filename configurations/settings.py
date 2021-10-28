@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'sales',
     'medicine',
     'pharmaProfile',
-    'medicineStock'
+    'medicineStock',
+    'rest_framework'
 
 ]
 

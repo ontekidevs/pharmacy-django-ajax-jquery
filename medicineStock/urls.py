@@ -1,5 +1,5 @@
 from django.urls import path
-from medicineStock import views as stockViews
+from medicineStock import serializers, views as stockViews
 
 urlpatterns = [
     path('', stockViews.CreateStock.as_view(), name='dashboard'),
@@ -9,4 +9,7 @@ urlpatterns = [
     path('update-exist-stock/<int:pk>/', stockViews.UpdateExistStock.as_view(), name='add_stock'),
     path('add-new-stock/', stockViews.AdddNewStock.as_view(), name='add_stock'),
     path('filter/', stockViews.StockFilter, name='filter'),
+
+    path('getstocklist/', serializers.Get_Stock_List.as_view(), name='getstocklist'),
+
 ]
