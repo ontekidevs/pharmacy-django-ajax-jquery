@@ -15,5 +15,4 @@ class Get_Stock_List(APIView):
     def get(self, request):
         stock = Stock.objects.all()
         serialized = StockSerializer(stock, many=True)
-        print(serialized)
         return Response(serialized.data)
