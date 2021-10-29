@@ -240,6 +240,9 @@
               <div class="modal fade top" id="centralModalStock" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
               aria-hidden="true" data-backdrop="false">
               <div class="modal-dialog modal-notify modal-success" role="document">
+                
+                 <form id="addStockForm" method="post">
+                   {% csrf_token %}
                 <!-- Content -->
                 <div class="modal-content">
                   <!-- Header -->
@@ -250,37 +253,45 @@
                       <span aria-hidden="true" class="white-text">&times;</span>
                     </button>
                   </div>
-                  <form action="" method="post">
-                    {% csrf_token %}
-                    {{form.as_p}}
-                  </form>
-    
+                  
                   <!-- Body -->
                   <div class="modal-body">
                       <div class="modal-body mb-0">
                           <div class="md-form form-sm">
                             <i class="fas fa-user prefix"></i>
-                            <input type="text" id="form8" class="form-control form-control-sm">
-                            <label for="form8">Medicine name</label>
+                            <select id="form8" class="form-control form-control-sm" name={{form.medicineId.html_name}}>
+                              
+                              {% for x in form.medicineId %}                              
+                              {{x}}                            
+                              {% endfor %}
+                            </select>
+                            <label for="form8">{{form.medicineId.label}}</label>
                           </div>
         
                           <div class="md-form form-sm">
                             <i class="fas fa-envelope prefix"></i>
-                            <input type="text" id="form9" class="form-control form-control-sm">
-                            <label for="form9">Biological name</label>
+                            <input type="date" name={{form.expireDate.html_name}} id="form9" class="form-control form-control-sm">
+                            <label for="form9">{{form.expireDate.label}}</label>
                           </div>
         
                           <div class="md-form form-sm">
                             <i class="fas fa-tag prefix"></i>
-                            <input type="text" id="form10" class="form-control form-control-sm">
-                            <label for="form10">Side effects</label>
+                            <input name={{form.buyingPrice.html_name}} type="number" id="form10" class="form-control form-control-sm">
+                            <label for="form10">{{form.buyingPrice.label}}</label>
                           </div>
         
                           <div class="row form-group form-sm">
                               <i class="fas fa-pencil-alt prefix"></i>
-                              <label for="form8">Expire date</label>
-                            <input type="date" class="form-control" name="date" id="expire_date">
+                              <label for="form8">{{form.sellingPrice.label}}</label>
+                            <input type="number" class="form-control" name={{form.sellingPrice.html_name}} id="expire_date">
                           </div>
+
+
+                          <div class="row form-group form-sm">
+                            <i class="fas fa-pencil-alt prefix"></i>
+                            <label for="form8">{{form.quantity.label}}</label>
+                          <input type="number" class="form-control" name={{form.quantity.html_name}} id="expire_date">
+                        </div>
         
         
                         </div>
@@ -290,7 +301,7 @@
                   <div class="modal-footer justify-content-center">
                     
                       <div class="text-center mt-1-half">
-                          <button class="btn btn-info mb-2">Save <i class="fas fa-paper-plane ml-1"></i></button>
+                          <button type="submit" class="btn btn-info mb-2">Save <i class="fas fa-paper-plane ml-1"></i></button>
                         </div>
   
                         
@@ -299,6 +310,8 @@
                           </button>
                         </div>
                   </div>
+                </form>
+  
                 </div>
                 <!-- Content -->
               </div>
@@ -323,7 +336,7 @@
                     console.log(stock);
                     
                     data += '<tr><th scope="row"><input class="form-check-input" type="checkbox" id="checkbox1" /><label for="checkbox1" class="label-table"></label></th>'
-                    data += '<td>'+stock.medicineId+'</td><td>'+stock.quantity+'</td><td>'+stock.expireDate+'</td><td>'+stock.buyingPrice+'</td><td>'+stock.sellingPrice+'</td><td>'+stock.profit+'</td>'
+                    data += '<td>'+stock.stockName+'</td><td>'+stock.quantity+'</td><td>'+stock.expireDate+'</td><td>'+stock.buyingPrice+'</td><td>'+stock.sellingPrice+'</td><td>'+stock._profit+'</td>'
                     data += '<td><a href="#" class="" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-pen text-primary"></i></a>'
                     data += '<a href="#" class="red-text" data-toggle="tooltip" data-placement="top" title="Add stock"><i class="fas text-warning fa-shopping-basket"></i></a>'
                     data += '<a href="#" class="red-text" data-toggle="tooltip"'
@@ -334,6 +347,45 @@
               })
             })
           })
+
+
+
+
+
+
+
+    $(document).on('submit', '#addStockForm', function(event){
+        $("#centralModalStock").modal("hide")
+        event.preventDefault();
+        let serializeForm = $('#addStockForm').serializeArray()
+        let csrf = $('input[name="csrfmiddlewaretoken"]')
+        let url = "{% url 'allstock' %}"
+
+        console.log(serializeForm)
+
+        $.ajax({
+            url: url,
+            csrfmiddlewaretoken: csrf,
+            data:serializeForm,
+            type: 'POST',
+            success: function(response){
+                  console.log(response.stock)
+                  let data =''
+
+                    data += '<tr><th scope="row"><input class="form-check-input" type="checkbox" id="checkbox1" /><label for="checkbox1" class="label-table"></label></th>'
+                    data += '<td>'+response.stock.stockName+'</td><td>'+response.stock.quantity+'</td><td>'+response.stock.expireDate+'</td><td>'+response.stock.buyingPrice+'</td><td>'+response.stock.sellingPrice+'</td><td>'+response.stock._profit+'</td>'
+                    data += '<td><a href="#" class="" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-pen text-primary"></i></a>'
+                    data += '<a href="#" class="red-text" data-toggle="tooltip" data-placement="top" title="Add stock"><i class="fas text-warning fa-shopping-basket"></i></a>'
+                    data += '<a href="#" class="red-text" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash-alt"></i></a></td></tr>'
+
+                    $("#stocklist").append(data)
+                },
+            error: function(){
+                console.log('there is an error')
+            }
+        })
+        $('#addStockForm')[0].reset()
+    })
         </script>
         {% endblock scripts %}
           

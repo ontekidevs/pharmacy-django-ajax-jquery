@@ -13,12 +13,13 @@ class Profile(models.Model):
     gender = CharField(max_length=255, null=True, blank=True)
     fullname = CharField(max_length=255, null=True, blank=True)
     owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    ownerName=models.CharField(max_length=255, null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
     mobile = models.IntegerField(null=True, blank=True)
     nida = models.IntegerField(null=True, blank=True)
     kura = models.IntegerField(null=True, blank=True)
     licence = models.CharField(max_length=255, null=True, blank=True)
-    email = models.EmailField(_("Email"), max_length=254)
+    email = models.EmailField(_("Email"), blank=True, max_length=254)
     location = models.CharField(max_length=255, null=True, blank=True)
     profileImage = models.ImageField(null=True, blank=True, editable=False, serialize=False)
     is_boss = models.BooleanField(_("Boss"), default=False)
@@ -49,6 +50,11 @@ class Profile(models.Model):
 
     def __str__(self) -> str:
         return str(self.owner)
+
+
+    def save(self, *args, **kwargs):
+        self.ownerName = self.owner.username
+        super().save(*args, **kwargs)
         
 expenses =(
     ('', '--choose type--'),

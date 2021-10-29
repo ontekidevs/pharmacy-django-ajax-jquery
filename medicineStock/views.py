@@ -50,8 +50,19 @@ class StockView(generic.ListView):
         context['expired']= expired_total
         context['soon_expired']= soon_expired_total
         context['safe']= safe_total
-
+        context['form'] = AddNewStockForm
         return context
+
+    def post(self, request):
+        form = AddNewStockForm(request.POST)
+
+        user = request.user
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.user = user
+            new_exp = form.save(commit=True)
+            total= Stock.objects.all().count()
+            return JsonResponse({'stock':model_to_dict(new_exp), 'total':total})
 
 
 def StockFilter(request):
@@ -75,7 +86,7 @@ def StockFilter(request):
         if request.is_ajax():
             filtered = Stock.objects.filter(expireDate__gte=dayz).values()
             print(filtered)
-            return JsonResponse({'data': dumps(filtered)})
+            return JsonResponse({'data': list(filtered)})
 
 
 
@@ -105,9 +116,25 @@ class UpdateExistStock(generic.UpdateView):
     success_url = reverse_lazy('allstock')
     
 
-class AdddNewStock(generic.UpdateView):
-    template_name = 'stock/edit_stock.html'
-    model = Stock
-    form_class = AddNewStockForm
-    success_url = reverse_lazy('allstock')
+# class AdddNewStock(generic.View):
+#     template_name = 'expenses/expenses.html'
+#     form = AddNewStockForm
+#     context = {}
+#     def get(self, request):
+#         self.context['form'] = self.form
+#         if self.request.user.is_authenticated:
+#             self.context['expenses']= Expense.objects.filter(user=self.request.user)
+
+#         return render(request, self.template_name, context=self.context)
     
+#     def post(self, request):
+#         form = self.form(request.POST)
+#         print(form)
+#         user = request.user
+#         if form.is_valid():
+#             form.save(commit=False)
+#             form.instance.user = user
+#             new_exp = form.save(commit=True)
+#             total= Expense.objects.all().count()
+#             return JsonResponse({'expense':model_to_dict(new_exp), 'total':total})
+#             # return HttpResponse('added successfully')
