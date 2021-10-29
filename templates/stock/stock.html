@@ -118,8 +118,7 @@
           {% for stock in stocks %}
           <tr>
             <th scope="row">
-              <input class="form-check-input" type="checkbox" id="checkbox1" />
-              <label for="checkbox1" class="label-table"></label>
+            {{forloop.counter}}
             </th>
             <td>{{stock.medicineId}}</td>
             <td>{{stock.quantity}}</td>
@@ -129,29 +128,26 @@
             <td>{{stock.profit}}</td>
             <td>
               <a
-                href="{% url 'edit_stock' stock.pk %}"
-                class=""
+                data-url="{% url 'edit_stock' stock.pk %}"
+                data-id={{stock.pk}}
+                data-name={{stock.stockName}}
+                class="editStock"
                 data-toggle="tooltip"
-                data-placement="top"
-                title="Edit"
-                ><i class="fas fa-pen text-primary"></i
-              ></a>
+                data-placement="top"title="Edit">
+                <i class="fas fa-pen text-primary"></i></a>
               <a
-                href="{% url 'add_stock' stock.pk%}"
-                class="red-text"
+                data-url="{% url 'add_stock' stock.pk%}"
+                data-toggle="modal" data-target="#centralModalStock"
+                class="addStock"
                 data-toggle="tooltip"
                 data-placement="top"
-                title="Add stock"
-                ><i class="fas text-warning fa-shopping-basket"></i
-              ></a>
+                title="Add stock"><i class="fas text-warning fa-shopping-basket"></i></a>
               <a
-                href="{% url 'delete_stock' stock.pk%}"
-                class="red-text"
+                data-url="{% url 'delete_stock' stock.pk%}"
+                class="deleteStock"
                 data-toggle="tooltip"
                 data-placement="top"
-                title="Delete"
-                ><i class="fas fa-trash-alt"></i
-              ></a>
+                title="Delete"><i class="fas fa-trash-alt red-text"></i></a>
             </td>
           </tr>
           {% endfor %}
@@ -236,7 +232,7 @@
 
 
         <!-- MODALS -->
-              <!-- down modal for adding stock-->
+              <!-- ADD STOCK MODAL FORM-->
               <div class="modal fade top" id="centralModalStock" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
               aria-hidden="true" data-backdrop="false">
               <div class="modal-dialog modal-notify modal-success" role="document">
@@ -247,7 +243,7 @@
                 <div class="modal-content">
                   <!-- Header -->
                   <div class="modal-header">
-                    <strong class="heading lead">Add Stock</strong>
+                    <strong class="heading lead" id="form-name">Add Stock</strong>
     
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true" class="white-text">&times;</span>
@@ -257,7 +253,7 @@
                   <!-- Body -->
                   <div class="modal-body">
                       <div class="modal-body mb-0">
-                          <div class="md-form form-sm">
+                          <div id="optional-field" class="md-form form-sm">
                             <i class="fas fa-user prefix"></i>
                             <select id="form8" class="form-control form-control-sm" name={{form.medicineId.html_name}}>
                               
@@ -270,27 +266,27 @@
         
                           <div class="md-form form-sm">
                             <i class="fas fa-envelope prefix"></i>
-                            <input type="date" name={{form.expireDate.html_name}} id="form9" class="form-control form-control-sm">
-                            <label for="form9">{{form.expireDate.label}}</label>
+                            <input type="date" name={{form.expireDate.html_name}} id="expire" class="form-control form-control-sm">
+                            <label for="expire">{{form.expireDate.label}}</label>
                           </div>
         
                           <div class="md-form form-sm">
                             <i class="fas fa-tag prefix"></i>
-                            <input name={{form.buyingPrice.html_name}} type="number" id="form10" class="form-control form-control-sm">
-                            <label for="form10">{{form.buyingPrice.label}}</label>
+                            <input name={{form.buyingPrice.html_name}} type="number" id="buying" class="form-control form-control-sm">
+                            <label for="buying">{{form.buyingPrice.label}}</label>
                           </div>
         
                           <div class="row form-group form-sm">
                               <i class="fas fa-pencil-alt prefix"></i>
-                              <label for="form8">{{form.sellingPrice.label}}</label>
-                            <input type="number" class="form-control" name={{form.sellingPrice.html_name}} id="expire_date">
+                              <label for="selling">{{form.sellingPrice.label}}</label>
+                            <input value="" id="selling" type="number" class="form-control" name={{form.sellingPrice.html_name}}>
                           </div>
 
 
                           <div class="row form-group form-sm">
                             <i class="fas fa-pencil-alt prefix"></i>
-                            <label for="form8">{{form.quantity.label}}</label>
-                          <input type="number" class="form-control" name={{form.quantity.html_name}} id="expire_date">
+                            <label for="quantity">{{form.quantity.label}}</label>
+                          <input id="quantity" type="number" class="form-control" name={{form.quantity.html_name}}>
                         </div>
         
         
@@ -315,7 +311,12 @@
                 </div>
                 <!-- Content -->
               </div>
-            </div>
+
+
+
+
+
+
         
         {% block scripts %}
         <script>
@@ -385,6 +386,32 @@
             }
         });
         $('#addStockForm')[0].reset()
+    })
+
+    // get-stock/12
+
+    $(document).on('click', '.editStock', function(){
+
+
+      id = $(this).data("id")
+      get_stock_url= "/get-stock/"+id;
+      $.ajax({
+        url:get_stock_url,
+        type: 'GET',
+        success: function(response){
+          console.log(response)
+          $("#selling").val(response.stock.sellingPrice)
+          $("#buying").val(response.stock.buyingPrice)
+          $("#quantity").val(response.stock.quantity)
+          $("#expire").val(response.stock.expireDate)
+          
+          $("#form-name").html("<h4>Edit "+response.stock.stockName+"</h4>")
+          
+          $("#optional-field").remove()
+          
+          $('#centralModalStock').modal('show')
+        }
+      })
     })
         </script>
         {% endblock scripts %}

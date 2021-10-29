@@ -15,13 +15,15 @@ class CreateStock(generic.TemplateView):
     template_name= 'stock/dashboard.html'
 
 
+def GetStock(request, pk):
+    stock = Stock.objects.get(pk=pk)
+    return JsonResponse({'stock':model_to_dict(stock)})
+
 class StockView(generic.ListView):
     template_name = "stock/stock.html"
     model = Stock
     context_object_name= 'stocks'
 
-
-    
     def get_context_data(self, **kwargs):
         context = super(StockView, self).get_context_data(**kwargs)
         expired = []
@@ -107,6 +109,12 @@ class EditStock(generic.UpdateView):
     model = Stock
     form_class = EditStockForm
     success_url = reverse_lazy('allstock')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form_class
+        print(context["form"])
+        return context
+    
 
 
 class UpdateExistStock(generic.UpdateView):
